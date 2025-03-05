@@ -3,7 +3,6 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
-    IfElseSubstitution,
     LaunchConfiguration,
     PathJoinSubstitution,
 )
@@ -22,10 +21,10 @@ def generate_launch_description():
         DeclareLaunchArgument("y", default_value="0.0"),
         DeclareLaunchArgument("z", default_value="0.4"),
         DeclareLaunchArgument("yaw", default_value="0.0"),
-        DeclareLaunchArgument("paused", default_value="false"),
+        DeclareLaunchArgument("paused", default_value="-r "), # -r for paused, "" for unpaused
         DeclareLaunchArgument("use_sim_time", default_value="true"),
         DeclareLaunchArgument("debug", default_value="false"),
-        DeclareLaunchArgument("verbose", default_value="false"),
+        DeclareLaunchArgument("verbose", default_value=""), # -v for verbose, "" for not verbose
         DeclareLaunchArgument("run_gui", default_value="true"),
     ]
 
@@ -50,12 +49,8 @@ def generate_launch_description():
         launch_arguments={
             "gz_args": [
                 "-s ",
-                IfElseSubstitution(
-                    LaunchConfiguration("paused"), if_value="", else_value="-r "
-                ),
-                IfElseSubstitution(
-                    LaunchConfiguration("verbose"), if_value="-v4 ", else_value=""
-                ),
+                LaunchConfiguration("paused"),
+                LaunchConfiguration("verbose"),
                 LaunchConfiguration("world_file"),
             ],
             "on_exit_shutdown": "true",
@@ -72,9 +67,7 @@ def generate_launch_description():
         launch_arguments={
             "gz_args": [
                 "-g ",
-                IfElseSubstitution(
-                    LaunchConfiguration("verbose"), if_value="-v4 ", else_value=""
-                ),
+                LaunchConfiguration("verbose"),
             ],
         }.items(),
         condition=IfCondition(LaunchConfiguration("run_gui")),
@@ -100,16 +93,11 @@ def generate_launch_description():
         FindPackageShare("smb_gazebo"), "config", "smb_gz_bridge.yaml"
     ])
 
-    ros_gz_bridge = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            PathJoinSubstitution([
-                FindPackageShare("ros_gz_bridge"), "launch", "ros_gz_bridge.launch.py"
-            ])
-        ),
-        launch_arguments={
-            "bridge_name": "ros_gz_bridge",
-            "config_file": ros_gz_bridge_config,
-        }.items(),
+    # Replace ros_gz_bridge IncludeLaunchDescription with Node
+    ros_gz_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        parameters=[{'config_file': ros_gz_bridge_config}],
     )
 
     return LaunchDescription(
