@@ -1,7 +1,7 @@
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -15,6 +15,14 @@ def generate_launch_description():
                 "gazebo.launch.py"
             ])
         )
+    )
+    
+    static_tf_map_to_odom = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="static_map_to_odom",
+        arguments=["0", "0", "0", "0", "0", "0", "map", "odom"],
+        output="log",
     )
 
     # Kinematics controller node
@@ -47,14 +55,67 @@ def generate_launch_description():
         package="joy",
         executable="joy_node",
         name="joy_node",
+        output="log",
+        parameters=[{"use_sim_time": True}],
+    )
+
+    # Terrain analysis node
+    terrain_analysis = Node(
+        package="terrain_analysis",
+        executable="terrainAnalysis",
+        name="terrainAnalysis",
         output="screen",
         parameters=[{"use_sim_time": True}],
+    )
+
+    # Terrain analysis ext node
+    terrain_analysis_ext = Node(
+        package="terrain_analysis_ext",
+        executable="terrainAnalysisExt",
+        name="terrainAnalysisExt",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+    )
+
+    # teleop_twist_joy launch include
+    teleop_twist_joy_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare("teleop_twist_joy"),
+                "launch",
+                "teleop-launch.py"
+            ])
+        ]),
+        launch_arguments={"publish_stamped_twist": "true"}.items(),
+        # output="log",
+    )
+
+    # dlio launch include
+    dlio_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare("direct_lidar_inertial_odometry"),
+                "launch",
+                "dlio.launch.py"
+            ])
+        ]),
+        launch_arguments={
+            "rviz": "true",
+            "pointcloud_topic": "/pointcloud",
+            "imu_topic": "/imu"
+        }.items(),
+        # output="log",
     )
 
     return LaunchDescription([
         gazebo_launch,
         kinematics_controller,
         low_level_controller,
-        joy_to_cmd_vel,
-        joy,
+        # joy_to_cmd_vel,
+        # joy,
+        terrain_analysis,
+        terrain_analysis_ext,
+        # teleop_twist_joy_launch,
+        dlio_launch,
+        static_tf_map_to_odom,
     ])
