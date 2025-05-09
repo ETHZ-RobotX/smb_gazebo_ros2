@@ -106,6 +106,26 @@ def generate_launch_description():
         }.items(),
         # output="log",
     )
+    
+    far_planner_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare("far_planner"),
+                "launch",
+                "far_planner.launch.py"
+            ])
+        ]),
+    )
+    
+    local_planner_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare("local_planner"),
+                "launch",
+                "local_planner.launch.py"
+            ])
+        ]),
+    )
 
     return LaunchDescription([
         gazebo_launch,
@@ -118,4 +138,6 @@ def generate_launch_description():
         # teleop_twist_joy_launch,
         dlio_launch,
         static_tf_map_to_odom,
+        far_planner_launch,
+        local_planner_launch,
     ])
