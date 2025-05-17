@@ -27,24 +27,24 @@ def generate_launch_description():
 
     # Kinematics controller node
     kinematics_controller = Node(
-        package="smb_kinematics_ros2",
-        executable="smb_kinematics_ros2_node",
-        name="smb_kinematics_ros2_node",
+        package="smb_kinematics",
+        executable="smb_kinematics_node",
+        name="smb_kinematics_node",
         output="screen",
         parameters=[{"use_sim_time": True}],
     )
 
     # Low-level gazebo controller node
     low_level_controller = Node(
-        package="smb_low_level_controller_gazebo_ros2",
-        executable="smb_low_level_controller_gazebo_ros2_node",
-        name="smb_low_level_controller_gazebo_ros2_node",
+        package="smb_low_level_controller_gazebo",
+        executable="smb_low_level_controller_gazebo_node",
+        name="smb_low_level_controller_gazebo_node",
         output="screen",
         parameters=[{"use_sim_time": True}],
     )
     
     joy_to_cmd_vel = Node(
-        package="smb_kinematics_ros2",
+        package="smb_kinematics",
         executable="smb_cmd_vel",
         name="smb_cmd_vel",
         output="screen",
@@ -133,11 +133,11 @@ def generate_launch_description():
         low_level_controller,
         # joy_to_cmd_vel,
         # joy,
-        terrain_analysis,
-        terrain_analysis_ext,
+        # terrain_analysis,
+        # terrain_analysis_ext,
         # teleop_twist_joy_launch,
         dlio_launch,
         static_tf_map_to_odom,
-        far_planner_launch,
-        local_planner_launch,
+        # far_planner_launch,
+        # local_planner_launch,
     ])
