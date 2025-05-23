@@ -100,7 +100,7 @@ def generate_launch_description():
             ])
         ]),
         launch_arguments={
-            "rviz": "true",
+            "rviz": "false",
             "pointcloud_topic": "/pointcloud",
             "imu_topic": "/imu"
         }.items(),
