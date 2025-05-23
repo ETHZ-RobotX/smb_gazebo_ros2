@@ -12,6 +12,8 @@
 
   <!-- Dependencies -->
   <depend>ros_gz_sim</depend>
+  <depend>far_planner</depend>
+  <depend>local_planner</depend>
   <exec_depend>smb_description</exec_depend>
 
   <export>
