@@ -34,8 +34,8 @@
 
 
 # gz topic published by IMU plugin
-- ros_topic_name: "imu"
-  gz_topic_name: "imu"
+- ros_topic_name: "imu/data_raw"
+  gz_topic_name: "imu/data_raw"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
@@ -47,7 +47,7 @@
 #   gz_type_name: "gz.msgs.LaserScan"
 #   direction: GZ_TO_ROS
 
-- ros_topic_name: "pointcloud"
+- ros_topic_name: "rslidar/points"
   gz_topic_name: "scan/points"
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"

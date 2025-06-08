@@ -101,8 +101,8 @@ def generate_launch_description():
         ]),
         launch_arguments={
             "rviz": "true",
-            "pointcloud_topic": "/pointcloud",
-            "imu_topic": "/imu"
+            "pointcloud_topic": "/rslidar/points",
+            "imu_topic": "/imu/data_raw"
         }.items(),
         # output="log",
     )
@@ -138,6 +138,6 @@ def generate_launch_description():
         # teleop_twist_joy_launch,
         dlio_launch,
         static_tf_map_to_odom,
-        far_planner_launch,
+        # far_planner_launch,
         local_planner_launch,
     ])

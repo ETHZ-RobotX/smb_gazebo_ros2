@@ -101,10 +101,18 @@ def generate_launch_description():
         ]),
         launch_arguments={
             "rviz": "true",
-            "pointcloud_topic": "/pointcloud",
-            "imu_topic": "/imu"
+            "pointcloud_topic": "/rslidar/points",
+            "imu_topic": "/imu/data_raw"
         }.items(),
         # output="log",
+    )
+    
+    local_odometry = Node(
+        package="smb_kinematics_ros2",
+        executable="smb_global_to_local_odometry",
+        name="smb_global_to_local_odometry",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
     )
     
     far_planner_launch = IncludeLaunchDescription(
@@ -137,6 +145,7 @@ def generate_launch_description():
         # terrain_analysis_ext,
         # teleop_twist_joy_launch,
         dlio_launch,
+        local_odometry,
         static_tf_map_to_odom,
         # far_planner_launch,
         # local_planner_launch,

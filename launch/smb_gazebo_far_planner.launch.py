@@ -101,8 +101,8 @@ def generate_launch_description():
         ]),
         launch_arguments={
             "rviz": "true",
-            "pointcloud_topic": "/pointcloud",
-            "imu_topic": "/imu"
+            "pointcloud_topic": "/rslidar/points",
+            "imu_topic": "/imu/data_raw"
         }.items(),
         # output="log",
     )
