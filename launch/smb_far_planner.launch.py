@@ -36,9 +36,9 @@ def generate_launch_description():
 
     # Low-level gazebo controller node
     low_level_controller = Node(
-        package="smb_low_level_controller_gazebo_ros2",
-        executable="smb_low_level_controller_gazebo_ros2_node",
-        name="smb_low_level_controller_gazebo_ros2_node",
+        package="smb_low_level_controller_gazebo",
+        executable="smb_low_level_controller_gazebo_node",
+        name="smb_low_level_controller_gazebo_node",
         output="screen",
         parameters=[{"use_sim_time": True}],
     )
