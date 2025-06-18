@@ -27,7 +27,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument("x", default_value="0.0"),
         DeclareLaunchArgument("y", default_value="0.0"),
-        DeclareLaunchArgument("z", default_value="0.2"),
+        DeclareLaunchArgument("z", default_value="0.5"),
         DeclareLaunchArgument("yaw", default_value="0.0"),
         DeclareLaunchArgument("paused", default_value="false"),
         DeclareLaunchArgument("use_sim_time", default_value="true"),
