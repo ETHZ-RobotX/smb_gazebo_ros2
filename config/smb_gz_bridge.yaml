@@ -32,7 +32,6 @@
 #   gz_type_name: "gz.msgs.Twist"
 #   direction: ROS_TO_GZ
 
-
 # gz topic published by IMU plugin
 - ros_topic_name: "imu"
   gz_topic_name: "imu"
@@ -60,18 +59,24 @@
   gz_type_name: "gz.msgs.Odometry"
   direction: GZ_TO_ROS
 
-# depth image 
+# depth image
 - ros_topic_name: "/depth_camera"
   gz_topic_name: "/depth_camera"
   gz_type_name: "gz.msgs.Image"
   ros_type_name: "sensor_msgs/msg/Image"
   direction: GZ_TO_ROS
 
-# camera image 
-- ros_topic_name: "/camera"
+# camera image
+- ros_topic_name: "/rgb_camera/image_raw"
   gz_topic_name: "/camera"
   gz_type_name: "gz.msgs.Image"
   ros_type_name: "sensor_msgs/msg/Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/rgb_camera/camera_info"
+  gz_topic_name: "/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "/LF_WHEEL_JOINT_velocity_cmd"
