@@ -11,7 +11,6 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    # Declare all launch arguments
     
     world_file_path = PathJoinSubstitution([
         FindPackageShare("smb_gazebo"),
@@ -36,7 +35,6 @@ def generate_launch_description():
         DeclareLaunchArgument("run_gui", default_value="true"),
     ]
 
-    # Include the existing load.launch.py
     load_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
@@ -46,46 +44,6 @@ def generate_launch_description():
             ])
         ])
     )
-
-    # # Gzserver
-    # gzserver = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         PathJoinSubstitution(
-    #             [FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"]
-    #         )
-    #     ),
-    #     launch_arguments={
-    #         "gz_args": [
-    #             "-s ",
-    #             IfElseSubstitution(
-    #                 LaunchConfiguration("paused"), if_value="", else_value="-r "
-    #             ),
-    #             IfElseSubstitution(
-    #                 LaunchConfiguration("verbose"), if_value="-v4 ", else_value=""
-    #             ),
-    #             LaunchConfiguration("world_file"),
-    #         ],
-    #         "on_exit_shutdown": "true",
-    #     }.items(),
-    # )
-
-    # # Gzclient
-    # gzclient = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         PathJoinSubstitution(
-    #             [FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"]
-    #         )
-    #     ),
-    #     launch_arguments={
-    #         "gz_args": [
-    #             "-g ",
-    #             IfElseSubstitution(
-    #                 LaunchConfiguration("verbose"), if_value="-v4 ", else_value=""
-    #             ),
-    #         ],
-    #     }.items(),
-    #     condition=IfCondition(LaunchConfiguration("run_gui")),
-    # )
     
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -102,7 +60,6 @@ def generate_launch_description():
         }.items(),
     )
 
-    # Spawn robot model
     spawn_robot = Node(
         package="ros_gz_sim",
         executable="create",
@@ -117,7 +74,6 @@ def generate_launch_description():
         output="screen",
     )
 
-    # ros_gz_bridge config
     ros_gz_bridge_config = PathJoinSubstitution([
         FindPackageShare("smb_gazebo"), "config", "smb_gz_bridge.yaml"
     ])
@@ -138,8 +94,6 @@ def generate_launch_description():
         declared_arguments
         + [
             load_launch,
-            # gzserver,
-            # gzclient,
             gz_sim,
             spawn_robot,
             ros_gz_bridge,
